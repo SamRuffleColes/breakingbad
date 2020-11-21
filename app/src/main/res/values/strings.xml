@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Breaking Bad</string>
+    <string name="error_updating_characters">Something went wrong updating characters from the API.</string>
+</resources>
