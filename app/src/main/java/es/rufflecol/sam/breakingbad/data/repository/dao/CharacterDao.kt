@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
 
+
 @Dao
 interface CharacterDao {
 
@@ -14,9 +15,16 @@ interface CharacterDao {
     fun insertAll(characters: List<CharacterEntity>)
 
     @Query("SELECT * FROM characters")
-    fun getAllCharacters(): LiveData<List<CharacterEntity>>
+    fun getAll(): LiveData<List<CharacterEntity>>
 
     @Query("SELECT * FROM characters WHERE name LIKE '%' || :query || '%'")
     fun searchByName(query: String): LiveData<List<CharacterEntity>>
+
+    @Query("SELECT * FROM characters WHERE series_appearances LIKE '%' || :series || '%'")
+    fun filterBySeries(series: String): LiveData<List<CharacterEntity>>
+
+    @Query("SELECT * FROM characters WHERE name LIKE '%' || :query || '%' AND series_appearances LIKE '%' || :series || '%'")
+    fun searchByNameAndFilterBySeries(query: String, series: String): LiveData<List<CharacterEntity>>
+
 
 }

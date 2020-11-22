@@ -6,13 +6,17 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import es.rufflecol.sam.breakingbad.R
 import es.rufflecol.sam.breakingbad.databinding.ActivityCharactersBinding
 import es.rufflecol.sam.breakingbad.ui.util.snack
+
 
 @AndroidEntryPoint
 class CharactersActivity : AppCompatActivity() {
@@ -35,6 +39,7 @@ class CharactersActivity : AppCompatActivity() {
         }
 
         setupListUI(binding.recyclerView)
+        setupFilterUI(binding.seriesChips)
         setupNotificationUI(binding.root)
     }
 
@@ -43,6 +48,41 @@ class CharactersActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         viewModel.characters.observe(this, {
             adapter.submitList(it)
+        })
+    }
+
+    private fun setupFilterUI(chipGroup: ChipGroup) {
+        viewModel.series.observe(this, { allSeries ->
+            chipGroup.removeAllViews()
+            allSeries.map { series ->
+                Chip(chipGroup.context).apply {
+                    text = series
+                    setChipDrawable(
+                        ChipDrawable.createFromAttributes(
+                            chipGroup.context,
+                            null,
+                            0,
+                            R.style.Widget_MaterialComponents_Chip_Choice
+                        )
+                    )
+                    isChecked = false
+                }
+            }.forEach { chip ->
+                chipGroup.addView(chip)
+            }
+
+            chipGroup.setOnCheckedChangeListener { _, _ ->
+                val checked = chipGroup.children
+                    .map { it as? Chip }
+                    .filterNotNull()
+                    .filter { it.isChecked }
+                    .firstOrNull()
+                if (checked != null) {
+                    viewModel.filter(checked.text.toString())
+                } else {
+                    viewModel.filter("")
+                }
+            }
         })
     }
 
@@ -58,8 +98,8 @@ class CharactersActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_characters, menu)
 
         val searchItem = menu.findItem(R.id.search)
-        val searchView = searchItem.actionView as SearchView
-        setupSearchUI(searchView)
+        val searchView = searchItem.actionView as? SearchView
+        searchView?.let { setupSearchUI(it) }
 
         return super.onCreateOptionsMenu(menu)
     }

@@ -12,6 +12,13 @@ interface CharactersRepository {
 
     val allCharacters: LiveData<List<CharacterEntity>>
 
+    fun filterBySeries(series: String): LiveData<List<CharacterEntity>>
+
+    fun searchByNameAndFilterBySeries(
+        query: String,
+        series: String
+    ): LiveData<List<CharacterEntity>>
+
     fun searchByName(query: String): LiveData<List<CharacterEntity>>
 
     suspend fun update()
@@ -24,9 +31,18 @@ class ApiCharactersRepository @Inject constructor(
 ) :
     CharactersRepository {
 
-    override val allCharacters = characterDao.getAllCharacters()
+    override val allCharacters = characterDao.getAll()
 
-    override fun searchByName(query: String) = characterDao.searchByName(query)
+    override fun filterBySeries(series: String): LiveData<List<CharacterEntity>> =
+        characterDao.filterBySeries(series)
+
+    override fun searchByNameAndFilterBySeries(
+        query: String,
+        series: String
+    ): LiveData<List<CharacterEntity>> = characterDao.searchByNameAndFilterBySeries(query, series)
+
+    override fun searchByName(query: String): LiveData<List<CharacterEntity>> =
+        characterDao.searchByName(query)
 
     override suspend fun update() {
         with(api.fetchAllCharacters()) {

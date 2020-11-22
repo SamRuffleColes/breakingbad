@@ -12,5 +12,5 @@ data class CharacterEntity(
     @ColumnInfo(name = "occupation") val occupation: String,
     @ColumnInfo(name = "status") val status: String,
     @ColumnInfo(name = "nickname") val nickname: String,
-    @ColumnInfo(name = "series_appearances") val seriesAppearances: String?,
+    @ColumnInfo(name = "series_appearances") val seriesAppearances: String,
 )

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "819fbe8aa5554d7cd7f196671f86a93d",
+    "identityHash": "a68ab2eceb1d9ede1f36a62afc087892",
     "entities": [
       {
         "tableName": "characters",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`character_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `image` TEXT NOT NULL, `occupation` TEXT NOT NULL, `status` TEXT NOT NULL, `nickname` TEXT NOT NULL, `series_appearances` TEXT, PRIMARY KEY(`character_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`character_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `image` TEXT NOT NULL, `occupation` TEXT NOT NULL, `status` TEXT NOT NULL, `nickname` TEXT NOT NULL, `series_appearances` TEXT NOT NULL, PRIMARY KEY(`character_id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -48,7 +48,7 @@
             "fieldPath": "seriesAppearances",
             "columnName": "series_appearances",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -64,7 +64,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '819fbe8aa5554d7cd7f196671f86a93d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a68ab2eceb1d9ede1f36a62afc087892')"
     ]
   }
 }

@@ -1,12 +1,12 @@
 package es.rufflecol.sam.breakingbad.ui.characters
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import es.rufflecol.sam.breakingbad.R
 import es.rufflecol.sam.breakingbad.data.repository.CharactersRepository
-import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
 import es.rufflecol.sam.breakingbad.ui.util.JobClearingViewModel
 import es.rufflecol.sam.breakingbad.ui.util.SingleLiveEvent
 import kotlinx.coroutines.CoroutineScope
@@ -23,12 +23,30 @@ class CharactersViewModel @ViewModelInject constructor(
     private val coroutineScope = CoroutineScope(coroutineContext + job)
 
     private val query = MutableLiveData("")
-    val characters: LiveData<List<CharacterEntity>> = query.switchMap { query ->
-        if (query.isNullOrBlank()) {
-            repository.allCharacters
-        } else {
-            repository.searchByName(query)
+    private val seriesFilter = MutableLiveData<String>()
+    private val queryAndSeriesFilters = MediatorLiveData<Pair<String, String>>().apply {
+        addSource(query) {
+            value = Pair(it, seriesFilter.value.orEmpty())
         }
+        addSource(seriesFilter) {
+            value = Pair(query.value.orEmpty(), it)
+        }
+    }
+    val characters = queryAndSeriesFilters.switchMap { pair ->
+        val query = pair.first
+        val seriesFilter = pair.second
+        when {
+            seriesFilter.isBlank() && query.isBlank() -> repository.allCharacters
+            query.isBlank() -> repository.filterBySeries(seriesFilter)
+            seriesFilter.isBlank() -> repository.searchByName(query)
+            else -> repository.searchByNameAndFilterBySeries(query, seriesFilter)
+        }
+    }
+    val series = repository.allCharacters.map { characters ->
+        characters.map { it.seriesAppearances.split(",") }
+            .flatten()
+            .toSortedSet()
+            .filterNot { it.isBlank() }
     }
     val userNotification = SingleLiveEvent<Int>()
 
@@ -44,6 +62,10 @@ class CharactersViewModel @ViewModelInject constructor(
 
     fun search(query: String) {
         this.query.value = query
+    }
+
+    fun filter(series: String) {
+        this.seriesFilter.value = series
     }
 
 }
