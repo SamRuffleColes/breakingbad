@@ -1,5 +1,6 @@
 package es.rufflecol.sam.breakingbad.ui.characters
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -14,7 +15,9 @@ import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import es.rufflecol.sam.breakingbad.R
+import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
 import es.rufflecol.sam.breakingbad.databinding.ActivityCharactersBinding
+import es.rufflecol.sam.breakingbad.ui.characterdetail.CharacterDetailActivity
 import es.rufflecol.sam.breakingbad.ui.util.snack
 
 
@@ -44,7 +47,9 @@ class CharactersActivity : AppCompatActivity() {
     }
 
     private fun setupListUI(recyclerView: RecyclerView) {
-        val adapter = CharactersAdapter()
+        val adapter = CharactersAdapter { character ->
+            startDetailActivity(character)
+        }
         recyclerView.adapter = adapter
         viewModel.characters.observe(this, {
             adapter.submitList(it)
@@ -116,4 +121,12 @@ class CharactersActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun startDetailActivity(character: CharacterEntity) {
+        val intent = Intent(this, CharacterDetailActivity::class.java).apply {
+            putExtra(CharacterDetailActivity.EXTRA_CHARACTER, character)
+        }
+        startActivity(intent)
+    }
+
 }

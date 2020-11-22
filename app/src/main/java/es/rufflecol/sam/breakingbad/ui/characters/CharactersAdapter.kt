@@ -2,7 +2,6 @@ package es.rufflecol.sam.breakingbad.ui.characters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +9,7 @@ import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
 import es.rufflecol.sam.breakingbad.databinding.ListItemCharacterBinding
 
 
-class CharactersAdapter :
+class CharactersAdapter(private val onCharacterClickListener: (character: CharacterEntity) -> Unit) :
     ListAdapter<CharacterEntity, RecyclerView.ViewHolder>(BreakingBadCharacterDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -19,7 +18,7 @@ class CharactersAdapter :
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), onCharacterClickListener
         )
     }
 
@@ -28,13 +27,17 @@ class CharactersAdapter :
         (holder as CharacterViewHolder).bind(venue)
     }
 
-    class CharacterViewHolder(private val binding: ListItemCharacterBinding) :
+    class CharacterViewHolder(
+        private val binding: ListItemCharacterBinding,
+        private val onCharacterClickListener: (character: CharacterEntity) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.setClickListener {
-                Toast.makeText(it.context, "${binding.character?.name} clicked", Toast.LENGTH_SHORT)
-                    .show()
+                binding.character?.let {
+                    onCharacterClickListener(it)
+                }
             }
         }
 

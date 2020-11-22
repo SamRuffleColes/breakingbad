@@ -17,11 +17,11 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{clickListener}"
         android:layout_marginStart="@dimen/padding_standard"
-        android:layout_marginEnd="@dimen/padding_standard"
         android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginEnd="@dimen/padding_standard"
         android:layout_marginBottom="@dimen/padding_small"
+        android:onClick="@{clickListener}"
         app:cardElevation="@dimen/card_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,22 +31,22 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="@dimen/list_photo_size"
-                android:layout_height="@dimen/list_photo_size"
+                android:layout_width="@dimen/photo_size"
+                android:layout_height="@dimen/photo_size"
                 app:imageFromUrl="@{character.image}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_standard"
+                android:layout_marginStart="@dimen/padding_standard"
                 android:text="@{character.name}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Venue Name" />
+                tools:text="Character Name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
