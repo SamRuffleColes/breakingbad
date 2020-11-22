@@ -1,9 +1,12 @@
 package es.rufflecol.sam.breakingbad.ui.characters
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,4 +54,26 @@ class CharactersActivity : AppCompatActivity() {
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_characters, menu)
+
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+        setupSearchUI(searchView)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun setupSearchUI(searchView: SearchView) {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.search(newText.orEmpty())
+                return true
+            }
+        })
+    }
 }

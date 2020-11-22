@@ -16,4 +16,7 @@ interface CharacterDao {
     @Query("SELECT * FROM characters")
     fun getAllCharacters(): LiveData<List<CharacterEntity>>
 
+    @Query("SELECT * FROM characters WHERE name LIKE '%' || :query || '%'")
+    fun searchByName(query: String): LiveData<List<CharacterEntity>>
+
 }

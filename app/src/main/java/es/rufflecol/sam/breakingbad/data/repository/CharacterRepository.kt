@@ -10,9 +10,11 @@ import javax.inject.Inject
 
 interface CharactersRepository {
 
-    val characters: LiveData<List<CharacterEntity>>
+    val allCharacters: LiveData<List<CharacterEntity>>
 
-    suspend fun updateCharacters()
+    fun searchByName(query: String): LiveData<List<CharacterEntity>>
+
+    suspend fun update()
 
 }
 
@@ -22,9 +24,11 @@ class ApiCharactersRepository @Inject constructor(
 ) :
     CharactersRepository {
 
-    override val characters = characterDao.getAllCharacters()
+    override val allCharacters = characterDao.getAllCharacters()
 
-    override suspend fun updateCharacters() {
+    override fun searchByName(query: String) = characterDao.searchByName(query)
+
+    override suspend fun update() {
         with(api.fetchAllCharacters()) {
             if (isSuccessful) {
                 val characters = body()?.asEntities()

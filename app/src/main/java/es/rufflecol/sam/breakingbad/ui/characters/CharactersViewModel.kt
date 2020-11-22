@@ -1,8 +1,12 @@
 package es.rufflecol.sam.breakingbad.ui.characters
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.switchMap
 import es.rufflecol.sam.breakingbad.R
 import es.rufflecol.sam.breakingbad.data.repository.CharactersRepository
+import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
 import es.rufflecol.sam.breakingbad.ui.util.JobClearingViewModel
 import es.rufflecol.sam.breakingbad.ui.util.SingleLiveEvent
 import kotlinx.coroutines.CoroutineScope
@@ -18,17 +22,28 @@ class CharactersViewModel @ViewModelInject constructor(
 
     private val coroutineScope = CoroutineScope(coroutineContext + job)
 
-    val characters = repository.characters
+    private val query = MutableLiveData("")
+    val characters: LiveData<List<CharacterEntity>> = query.switchMap { query ->
+        if (query.isNullOrBlank()) {
+            repository.allCharacters
+        } else {
+            repository.searchByName(query)
+        }
+    }
     val userNotification = SingleLiveEvent<Int>()
 
     fun updateCharacters() {
         coroutineScope.launch {
             try {
-                repository.updateCharacters()
+                repository.update()
             } catch (e: Exception) {
                 userNotification.postValue(R.string.error_updating_characters)
             }
         }
+    }
+
+    fun search(query: String) {
+        this.query.value = query
     }
 
 }
