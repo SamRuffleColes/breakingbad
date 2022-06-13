@@ -3,14 +3,14 @@ package es.rufflecol.sam.breakingbad.di.module
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ViewModelComponent
 import es.rufflecol.sam.breakingbad.data.api.BreakingBadApi
 import es.rufflecol.sam.breakingbad.data.repository.ApiCharactersRepository
 import es.rufflecol.sam.breakingbad.data.repository.CharactersRepository
 import es.rufflecol.sam.breakingbad.data.repository.db.BreakingBadDatabase
 
 @Module
-@InstallIn(ActivityComponent::class)
+@InstallIn(ViewModelComponent::class)
 object RepositoryModule {
 
     @Provides
