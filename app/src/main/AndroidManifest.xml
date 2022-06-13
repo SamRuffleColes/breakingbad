@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Breakingbad">
 
-        <activity android:name=".ui.characters.CharactersActivity">
+        <activity android:name=".ui.characters.CharactersActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
