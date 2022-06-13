@@ -1,28 +1,17 @@
 package es.rufflecol.sam.breakingbad.ui.characters
 
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import es.rufflecol.sam.breakingbad.R
 import es.rufflecol.sam.breakingbad.data.repository.CharactersRepository
-import es.rufflecol.sam.breakingbad.ui.util.JobClearingViewModel
 import es.rufflecol.sam.breakingbad.ui.util.SingleLiveEvent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class CharactersViewModel @Inject constructor(
-    private val repository: CharactersRepository,
-    coroutineContext: CoroutineContext,
-    job: Job
-) : JobClearingViewModel(job) {
-
-    private val coroutineScope = CoroutineScope(coroutineContext + job)
+    private val repository: CharactersRepository
+) : ViewModel() {
 
     private val query = MutableLiveData("")
     private val seriesFilter = MutableLiveData<String>()
@@ -53,7 +42,7 @@ class CharactersViewModel @Inject constructor(
     val userNotification = SingleLiveEvent<Int>()
 
     fun updateCharacters() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             try {
                 repository.update()
             } catch (e: Exception) {
