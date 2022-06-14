@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import es.rufflecol.sam.breakingbad.MainCoroutineRule
 import es.rufflecol.sam.breakingbad.R
 import es.rufflecol.sam.breakingbad.data.repository.CharactersRepository
 import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -21,11 +23,13 @@ import org.mockito.junit.MockitoJUnitRunner
 class CharactersViewModelTest {
 
     @get:Rule
-    val rule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val mainCoroutineRule = MainCoroutineRule()
 
     private val charactersRepository: CharactersRepository = mock()
-    private val viewModel =
-        CharactersViewModel(charactersRepository, Dispatchers.Unconfined, SupervisorJob())
+    private val viewModel = CharactersViewModel(charactersRepository)
 
     @Before
     fun setUp() {
@@ -52,6 +56,7 @@ class CharactersViewModelTest {
         )
 
         viewModel.characters.observeForever {}
+
     }
 
     @Test
