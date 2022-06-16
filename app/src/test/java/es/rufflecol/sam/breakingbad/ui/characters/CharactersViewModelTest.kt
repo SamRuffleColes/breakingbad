@@ -1,24 +1,24 @@
 package es.rufflecol.sam.breakingbad.ui.characters
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import es.rufflecol.sam.breakingbad.MainCoroutineRule
 import es.rufflecol.sam.breakingbad.R
+import es.rufflecol.sam.breakingbad.TestCoroutineDispatchProvider
 import es.rufflecol.sam.breakingbad.data.repository.CharactersRepository
 import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
 class CharactersViewModelTest {
 
@@ -29,18 +29,22 @@ class CharactersViewModelTest {
     val mainCoroutineRule = MainCoroutineRule()
 
     private val charactersRepository: CharactersRepository = mock()
-    private val viewModel = CharactersViewModel(charactersRepository)
+    private val viewModel = CharactersViewModel(charactersRepository, TestCoroutineDispatchProvider())
 
     @Before
     fun setUp() {
-        whenever(charactersRepository.allCharacters).thenReturn(MutableLiveData(ALL_CHARACTERS))
+        whenever(charactersRepository.allCharacters).thenReturn(
+            flowOf(
+                ALL_CHARACTERS
+            )
+        )
         whenever(charactersRepository.searchByName(NAME_QUERY)).thenReturn(
-            MutableLiveData(
+            flowOf(
                 SEARCH_QUERIED_BY_NAME_CHARACTERS
             )
         )
         whenever(charactersRepository.filterBySeries(SERIES_FILTER)).thenReturn(
-            MutableLiveData(
+            flowOf(
                 FILTERED_BY_SERIES_CHARACTERS
             )
         )
@@ -50,7 +54,7 @@ class CharactersViewModelTest {
                 SERIES_FILTER
             )
         ).thenReturn(
-            MutableLiveData(
+            flowOf(
                 SEARCH_QUERIED_BY_NAME_AND_FILTERED_BY_SERIES_CHARACTERS
             )
         )

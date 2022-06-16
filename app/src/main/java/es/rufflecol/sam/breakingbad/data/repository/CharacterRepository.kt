@@ -5,21 +5,22 @@ import es.rufflecol.sam.breakingbad.data.api.BreakingBadApi
 import es.rufflecol.sam.breakingbad.data.api.dto.asEntities
 import es.rufflecol.sam.breakingbad.data.repository.dao.CharacterDao
 import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
 interface CharactersRepository {
 
-    val allCharacters: LiveData<List<CharacterEntity>>
+    val allCharacters: Flow<List<CharacterEntity>>
 
-    fun filterBySeries(series: String): LiveData<List<CharacterEntity>>
+    fun filterBySeries(series: String): Flow<List<CharacterEntity>>
 
     fun searchByNameAndFilterBySeries(
         query: String,
         series: String
-    ): LiveData<List<CharacterEntity>>
+    ): Flow<List<CharacterEntity>>
 
-    fun searchByName(query: String): LiveData<List<CharacterEntity>>
+    fun searchByName(query: String): Flow<List<CharacterEntity>>
 
     suspend fun update()
 
@@ -33,15 +34,15 @@ class ApiCharactersRepository @Inject constructor(
 
     override val allCharacters = characterDao.getAll()
 
-    override fun filterBySeries(series: String): LiveData<List<CharacterEntity>> =
+    override fun filterBySeries(series: String): Flow<List<CharacterEntity>> =
         characterDao.filterBySeries(series)
 
     override fun searchByNameAndFilterBySeries(
         query: String,
         series: String
-    ): LiveData<List<CharacterEntity>> = characterDao.searchByNameAndFilterBySeries(query, series)
+    ): Flow<List<CharacterEntity>> = characterDao.searchByNameAndFilterBySeries(query, series)
 
-    override fun searchByName(query: String): LiveData<List<CharacterEntity>> =
+    override fun searchByName(query: String): Flow<List<CharacterEntity>> =
         characterDao.searchByName(query)
 
     override suspend fun update() {

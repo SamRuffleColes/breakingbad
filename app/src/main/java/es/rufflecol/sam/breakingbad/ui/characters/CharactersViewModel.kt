@@ -3,14 +3,17 @@ package es.rufflecol.sam.breakingbad.ui.characters
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import es.rufflecol.sam.breakingbad.R
+import es.rufflecol.sam.breakingbad.common.coroutine.CoroutineDispatchProvider
 import es.rufflecol.sam.breakingbad.data.repository.CharactersRepository
 import es.rufflecol.sam.breakingbad.ui.util.SingleLiveEvent
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CharactersViewModel @Inject constructor(
-    private val repository: CharactersRepository
+    private val repository: CharactersRepository,
+    private val coroutineDispatchProvider: CoroutineDispatchProvider
 ) : ViewModel() {
 
     private val query = MutableLiveData("")
@@ -27,10 +30,10 @@ class CharactersViewModel @Inject constructor(
         val query = pair.first
         val seriesFilter = pair.second
         when {
-            seriesFilter.isBlank() && query.isBlank() -> repository.allCharacters
-            query.isBlank() -> repository.filterBySeries(seriesFilter)
-            seriesFilter.isBlank() -> repository.searchByName(query)
-            else -> repository.searchByNameAndFilterBySeries(query, seriesFilter)
+            seriesFilter.isBlank() && query.isBlank() -> repository.allCharacters.asLiveData()
+            query.isBlank() -> repository.filterBySeries(seriesFilter).asLiveData()
+            seriesFilter.isBlank() -> repository.searchByName(query).asLiveData()
+            else -> repository.searchByNameAndFilterBySeries(query, seriesFilter).asLiveData()
         }
     }
     val series = repository.allCharacters.map { characters ->
@@ -38,11 +41,11 @@ class CharactersViewModel @Inject constructor(
             .flatten()
             .toSortedSet()
             .filterNot { it.isBlank() }
-    }
+    }.asLiveData()
     val userNotification = SingleLiveEvent<Int>()
 
     fun updateCharacters() {
-        viewModelScope.launch {
+        viewModelScope.launch(coroutineDispatchProvider.io) {
             try {
                 repository.update()
             } catch (e: Exception) {
