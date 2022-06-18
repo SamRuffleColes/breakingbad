@@ -15,10 +15,10 @@ import org.junit.Test
 class GetSeriesUseCaseTest {
 
     companion object {
-        private const val series1 = "series_1_name"
-        private const val series2 = "series_2_name"
-        private const val series3 = "series_3_name"
-        private const val series4 = "series_4_name"
+        private const val series1 = "S1"
+        private const val series2 = "S2"
+        private const val series3 = "S3"
+        private const val series4 = "S4"
     }
 
     private val repository: CharactersRepository = mockk(relaxed = true)
