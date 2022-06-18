@@ -1,26 +1,40 @@
 package es.rufflecol.sam.breakingbad.ui.characters
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import es.rufflecol.sam.breakingbad.MainCoroutineRule
 import es.rufflecol.sam.breakingbad.R
 import es.rufflecol.sam.breakingbad.TestCoroutineDispatchProvider
-import es.rufflecol.sam.breakingbad.data.repository.CharactersRepository
 import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
+import es.rufflecol.sam.breakingbad.domain.model.exception.UpdateFailedException
+import es.rufflecol.sam.breakingbad.testCharacter
+import es.rufflecol.sam.breakingbad.ui.characters.usecase.CharactersUseCases
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.junit4.MockKRule
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class CharactersViewModelTest {
+
+    companion object {
+        private const val nameSearchQuery = "Da"
+        private const val seriesFilter = "S4"
+
+        private val character0 = testCharacter(id = 0, name = "Tim", seriesAppearances = "S1,S2,S3,S4")
+        private val character1 = testCharacter(id = 1, name = "Dan", seriesAppearances = "S1,S2,S3")
+        private val character2 = testCharacter(id = 2, name = "Dave", seriesAppearances = "S1,S2,S3,S4")
+
+        private val allCharacters = listOf(character0, character1, character2)
+        private val queriedByNameCharacters = listOf(character1, character2)
+        private val filteredBySeriesCharacters = listOf(character0, character2)
+        private val queriedByNameAndFilteredBySeriesCharacters = listOf(character2)
+    }
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -28,113 +42,82 @@ class CharactersViewModelTest {
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
 
-    private val charactersRepository: CharactersRepository = mock()
-    private val viewModel = CharactersViewModel(charactersRepository, TestCoroutineDispatchProvider())
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
+    private val charactersUseCases: CharactersUseCases = mockk(relaxed = true)
+    private val sut = CharactersViewModel(charactersUseCases, TestCoroutineDispatchProvider())
 
     @Before
     fun setUp() {
-        whenever(charactersRepository.allCharacters).thenReturn(
-            flowOf(
-                ALL_CHARACTERS
-            )
+        every { charactersUseCases.getCharacters() } returns flowOf(allCharacters)
+        every { charactersUseCases.getCharacters(nameQuery = nameSearchQuery) } returns flowOf(
+            queriedByNameCharacters
         )
-        whenever(charactersRepository.searchByName(NAME_QUERY)).thenReturn(
-            flowOf(
-                SEARCH_QUERIED_BY_NAME_CHARACTERS
-            )
+        every { charactersUseCases.getCharacters(seriesFilter = seriesFilter) } returns flowOf(
+            filteredBySeriesCharacters
         )
-        whenever(charactersRepository.filterBySeries(SERIES_FILTER)).thenReturn(
-            flowOf(
-                FILTERED_BY_SERIES_CHARACTERS
+        every {
+            charactersUseCases.getCharacters(
+                nameQuery = nameSearchQuery,
+                seriesFilter = seriesFilter
             )
-        )
-        whenever(
-            charactersRepository.searchByNameAndFilterBySeries(
-                NAME_QUERY,
-                SERIES_FILTER
-            )
-        ).thenReturn(
-            flowOf(
-                SEARCH_QUERIED_BY_NAME_AND_FILTERED_BY_SERIES_CHARACTERS
-            )
+        } returns flowOf(
+            queriedByNameAndFilteredBySeriesCharacters
         )
 
-        viewModel.characters.observeForever {}
-
+        sut.characters.observeForever {}
     }
 
     @Test
-    fun `when update throws exception, an error notification is shown`() {
-        runBlocking {
-            whenever(charactersRepository.update()).thenThrow(RuntimeException())
+    fun `when update throws UpdateFailedException, an error notification is shown`() {
+        coEvery { charactersUseCases.updateCharacters() } throws UpdateFailedException("")
 
-            viewModel.updateCharacters()
+        sut.updateCharacters()
 
-            assertThat(viewModel.userNotification.value).isEqualTo(R.string.error_updating_characters)
-        }
+        assertThat(sut.userNotification.value)
+            .isEqualTo(R.string.error_updating_characters)
     }
 
     @Test
     fun `characters initially returns all characters`() {
-        assertThat(viewModel.characters.value).isEqualTo(ALL_CHARACTERS)
+        assertThat(sut.characters.value)
+            .isEqualTo(allCharacters)
     }
 
     @Test
     fun `when search query is blank and series filter is blank then all characters returned`() {
-        viewModel.search("")
-        viewModel.filter("")
+        sut.search("")
+        sut.filter("")
 
-        assertThat(viewModel.characters.value).isEqualTo(ALL_CHARACTERS)
+        assertThat(sut.characters.value)
+            .isEqualTo(allCharacters)
     }
 
     @Test
     fun `when search query is blank and series filter is set then characters filtered by series returned`() {
-        viewModel.search("")
-        viewModel.filter(SERIES_FILTER)
+        sut.search("")
+        sut.filter(seriesFilter)
 
-        assertThat(viewModel.characters.value).isEqualTo(FILTERED_BY_SERIES_CHARACTERS)
+        assertThat(sut.characters.value)
+            .isEqualTo(filteredBySeriesCharacters)
     }
 
     @Test
     fun `when search query is set and series filter is blank then characters by search returned`() {
-        viewModel.search(NAME_QUERY)
-        viewModel.filter("")
+        sut.search(nameSearchQuery)
+        sut.filter("")
 
-        assertThat(viewModel.characters.value).isEqualTo(SEARCH_QUERIED_BY_NAME_CHARACTERS)
+        assertThat(sut.characters.value)
+            .isEqualTo(queriedByNameCharacters)
     }
 
     @Test
     fun `when search query is set and series filter is set then all characters by search and filter returned`() {
-        viewModel.search(NAME_QUERY)
-        viewModel.filter(SERIES_FILTER)
+        sut.search(nameSearchQuery)
+        sut.filter(seriesFilter)
 
-        assertThat(viewModel.characters.value).isEqualTo(
-            SEARCH_QUERIED_BY_NAME_AND_FILTERED_BY_SERIES_CHARACTERS
-        )
-    }
-
-    companion object {
-        const val NAME_QUERY = "Da"
-        const val SERIES_FILTER = "S4"
-
-        val ALL_CHARACTERS = listOf(
-            CharacterEntity(0, "Tim", "", "", "", "", "S1,S2,S3,S4"),
-            CharacterEntity(1, "Dan", "", "", "", "", "S1,S2,S3"),
-            CharacterEntity(2, "Dave", "", "", "", "", "S1,S2,S3,S4")
-        )
-        val SEARCH_QUERIED_BY_NAME_CHARACTERS = listOf(
-            CharacterEntity(1, "Dan", "", "", "", "", "S1,S2,S3"),
-            CharacterEntity(2, "Dave", "", "", "", "", "S1,S2,S3,S4")
-        )
-        val FILTERED_BY_SERIES_CHARACTERS =
-            listOf(
-                CharacterEntity(0, "Tim", "", "", "", "", "S1,S2,S3,S4"),
-                CharacterEntity(2, "Dave", "", "", "", "", "S1,S2,S3,S4")
-            )
-
-        val SEARCH_QUERIED_BY_NAME_AND_FILTERED_BY_SERIES_CHARACTERS = listOf(
-            CharacterEntity(2, "Dave", "", "", "", "", "S1,S2,S3,S4")
-        )
-
+        assertThat(sut.characters.value)
+            .isEqualTo(queriedByNameAndFilteredBySeriesCharacters)
     }
 }

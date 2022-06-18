@@ -1,10 +1,10 @@
 package es.rufflecol.sam.breakingbad.data.repository
 
-import androidx.lifecycle.LiveData
 import es.rufflecol.sam.breakingbad.data.api.BreakingBadApi
 import es.rufflecol.sam.breakingbad.data.api.dto.asEntities
 import es.rufflecol.sam.breakingbad.data.repository.dao.CharacterDao
 import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
+import es.rufflecol.sam.breakingbad.domain.model.exception.UpdateFailedException
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -45,12 +45,18 @@ class ApiCharactersRepository @Inject constructor(
     override fun searchByName(query: String): Flow<List<CharacterEntity>> =
         characterDao.searchByName(query)
 
+    @Throws(UpdateFailedException::class)
     override suspend fun update() {
-        with(api.fetchAllCharacters()) {
-            if (isSuccessful) {
-                val characters = body()?.asEntities()
+        try {
+            val response = api.fetchAllCharacters()
+            if (response.isSuccessful) {
+                val characters = response.body()?.asEntities()
                 characterDao.insertAll(characters.orEmpty())
+            } else {
+                throw UpdateFailedException("api response unsuccessful")
             }
+        } catch (e: Exception) {
+            throw UpdateFailedException(e.message.orEmpty())
         }
     }
 
