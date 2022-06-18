@@ -4,10 +4,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import es.rufflecol.sam.breakingbad.data.api.BreakingBadApi
-import es.rufflecol.sam.breakingbad.data.repository.ApiCharactersRepository
-import es.rufflecol.sam.breakingbad.data.repository.CharactersRepository
-import es.rufflecol.sam.breakingbad.data.repository.db.BreakingBadDatabase
+import es.rufflecol.sam.breakingbad.characters.data.remote.BreakingBadApi
+import es.rufflecol.sam.breakingbad.characters.data.repository.CharacterRepositoryImpl
+import es.rufflecol.sam.breakingbad.characters.domain.repository.CharactersRepository
+import es.rufflecol.sam.breakingbad.characters.data.source.BreakingBadDatabase
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -17,6 +17,6 @@ object RepositoryModule {
     fun provideCharactersRepository(
         api: BreakingBadApi,
         database: BreakingBadDatabase
-    ): CharactersRepository = ApiCharactersRepository(api, database.characterDao)
+    ): CharactersRepository = CharacterRepositoryImpl(api, database.characterDao)
 
 }

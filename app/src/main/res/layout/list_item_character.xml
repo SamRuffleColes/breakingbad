@@ -11,7 +11,7 @@
 
         <variable
             name="character"
-            type="es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity" />
+            type="es.rufflecol.sam.breakingbad.characters.domain.model.CharacterEntity" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Breakingbad">
 
-        <activity android:name=".ui.characters.CharactersActivity"
+        <activity android:name=".characters.presentation.characters.CharactersActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,8 +22,8 @@
         </activity>
 
         <activity
-            android:name=".ui.characterdetail.CharacterDetailActivity"
-            android:parentActivityName=".ui.characters.CharactersActivity" />
+            android:name=".characters.presentation.characterdetail.CharacterDetailActivity"
+            android:parentActivityName=".characters.presentation.characters.CharactersActivity" />
 
     </application>
 

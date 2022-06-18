@@ -7,8 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import es.rufflecol.sam.breakingbad.data.repository.dao.CharacterDao
-import es.rufflecol.sam.breakingbad.data.repository.db.BreakingBadDatabase
+import es.rufflecol.sam.breakingbad.characters.data.source.CharacterDao
+import es.rufflecol.sam.breakingbad.characters.data.source.BreakingBadDatabase
 import javax.inject.Singleton
 
 @Module

@@ -1,6 +1,8 @@
 package es.rufflecol.sam.breakingbad.data.api.dto
 
-import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
+import es.rufflecol.sam.breakingbad.characters.data.remote.dto.BreakingBadCharacterDto
+import es.rufflecol.sam.breakingbad.characters.data.remote.dto.asEntities
+import es.rufflecol.sam.breakingbad.characters.domain.model.CharacterEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

@@ -4,10 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import es.rufflecol.sam.breakingbad.MainCoroutineRule
 import es.rufflecol.sam.breakingbad.R
 import es.rufflecol.sam.breakingbad.TestCoroutineDispatchProvider
-import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
-import es.rufflecol.sam.breakingbad.domain.model.exception.UpdateFailedException
+import es.rufflecol.sam.breakingbad.characters.domain.model.exception.UpdateFailedException
 import es.rufflecol.sam.breakingbad.testCharacter
-import es.rufflecol.sam.breakingbad.ui.characters.usecase.CharactersUseCases
+import es.rufflecol.sam.breakingbad.characters.domain.usecase.CharactersUseCases
+import es.rufflecol.sam.breakingbad.characters.presentation.characters.CharactersViewModel
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.junit4.MockKRule

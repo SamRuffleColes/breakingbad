@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import es.rufflecol.sam.breakingbad.data.api.BreakingBadApi
+import es.rufflecol.sam.breakingbad.characters.data.remote.BreakingBadApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton

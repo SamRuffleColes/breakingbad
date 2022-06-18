@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="es.rufflecol.sam.breakingbad.ui.characters.CharactersViewModel" />
+            type="es.rufflecol.sam.breakingbad.characters.presentation.characters.CharactersViewModel" />
 
     </data>
 

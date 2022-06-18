@@ -1,6 +1,6 @@
 package es.rufflecol.sam.breakingbad
 
-import es.rufflecol.sam.breakingbad.data.repository.entity.CharacterEntity
+import es.rufflecol.sam.breakingbad.characters.domain.model.CharacterEntity
 
 fun testCharacter(
     id: Int = 0,
