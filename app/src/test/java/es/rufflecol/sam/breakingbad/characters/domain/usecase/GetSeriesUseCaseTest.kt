@@ -27,7 +27,7 @@ class GetSeriesUseCaseTest {
 
     @Test
     fun `given characters is empty, when invoke, then return empty list`() = runTest {
-        every { repository.allCharacters } returns flowOf(emptyList())
+        every { repository.allCharacters() } returns flowOf(emptyList())
 
         val result = sut()
 
@@ -37,7 +37,7 @@ class GetSeriesUseCaseTest {
     @Test
     fun `given no series appearances, when invoke, then return empty list`() = runTest {
         val character = testCharacter(seriesAppearances = "")
-        every { repository.allCharacters } returns flowOf(listOf(character))
+        every { repository.allCharacters() } returns flowOf(listOf(character))
 
         val result = sut()
 
@@ -49,7 +49,7 @@ class GetSeriesUseCaseTest {
         val firstCharacter = testCharacter(id = 0, seriesAppearances = "$series1,$series2")
         val secondCharacter =
             testCharacter(id = 1, seriesAppearances = "$series1,$series2,$series3,$series4")
-        every { repository.allCharacters } returns flowOf(listOf(firstCharacter, secondCharacter))
+        every { repository.allCharacters() } returns flowOf(listOf(firstCharacter, secondCharacter))
 
         val result = sut()
 
@@ -60,7 +60,7 @@ class GetSeriesUseCaseTest {
     @Test
     fun `when invoke, then return series sorted`() = runTest {
         val character = testCharacter(seriesAppearances = "$series4,$series2,$series1,$series3")
-        every { repository.allCharacters } returns flowOf(listOf(character))
+        every { repository.allCharacters() } returns flowOf(listOf(character))
 
         val result = sut()
 
@@ -71,7 +71,7 @@ class GetSeriesUseCaseTest {
     @Test
     fun `given series contains blanks, when invoke, then remove blank series`() = runTest {
         val character = testCharacter(seriesAppearances = "$series1,,$series4,,,")
-        every { repository.allCharacters } returns flowOf(listOf(character))
+        every { repository.allCharacters() } returns flowOf(listOf(character))
 
         val result = sut()
 

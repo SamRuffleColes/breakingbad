@@ -31,7 +31,7 @@ class GetCharactersUseCaseTest {
 
     @Before
     fun setUp() {
-        every { repository.allCharacters } returns allCharactersResult
+        every { repository.allCharacters() } returns allCharactersResult
         every { repository.filterBySeries(seriesFilter) } returns filterBySeriesResult
         every { repository.searchByName(nameSearchQuery) } returns searchByNameResult
         every {

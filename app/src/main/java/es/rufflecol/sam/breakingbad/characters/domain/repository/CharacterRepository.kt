@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CharactersRepository {
 
-    val allCharacters: Flow<List<CharacterEntity>>
+    fun allCharacters(): Flow<List<CharacterEntity>>
 
     fun filterBySeries(series: String): Flow<List<CharacterEntity>>
 

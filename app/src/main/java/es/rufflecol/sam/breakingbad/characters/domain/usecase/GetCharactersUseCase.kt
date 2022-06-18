@@ -11,7 +11,7 @@ class GetCharactersUseCase(private val repository: CharactersRepository) {
         seriesFilter: String = ""
     ): Flow<List<CharacterEntity>> {
         return when {
-            seriesFilter.isBlank() && nameQuery.isBlank() -> repository.allCharacters
+            seriesFilter.isBlank() && nameQuery.isBlank() -> repository.allCharacters()
             nameQuery.isBlank() -> repository.filterBySeries(seriesFilter)
             seriesFilter.isBlank() -> repository.searchByName(nameQuery)
             else -> repository.searchByNameAndFilterBySeries(nameQuery, seriesFilter)

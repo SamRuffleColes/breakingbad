@@ -15,7 +15,7 @@ class CharacterRepositoryImpl @Inject constructor(
 ) :
     CharactersRepository {
 
-    override val allCharacters = characterDao.getAll()
+    override fun allCharacters(): Flow<List<CharacterEntity>> = characterDao.getAll()
 
     override fun filterBySeries(series: String): Flow<List<CharacterEntity>> =
         characterDao.filterBySeries(series)
@@ -42,5 +42,4 @@ class CharacterRepositoryImpl @Inject constructor(
             throw UpdateFailedException(e.message.orEmpty())
         }
     }
-
 }
