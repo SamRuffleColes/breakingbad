@@ -50,13 +50,13 @@ class CharactersActivity : AppCompatActivity() {
             startDetailActivity(character)
         }
         recyclerView.adapter = adapter
-        viewModel.characters.observe(this, {
+        viewModel.characters.observe(this) {
             adapter.submitList(it)
-        })
+        }
     }
 
     private fun setupFilterUI(chipGroup: ChipGroup) {
-        viewModel.series.observe(this, { allSeries ->
+        viewModel.series.observe(this) { allSeries ->
             chipGroup.removeAllViews()
             allSeries.map { series ->
                 Chip(chipGroup.context).apply {
@@ -87,15 +87,15 @@ class CharactersActivity : AppCompatActivity() {
                     viewModel.filter("")
                 }
             }
-        })
+        }
     }
 
     private fun setupNotificationUI(root: View) {
-        viewModel.userNotification.observe(this, {
+        viewModel.userNotification.observe(this) {
             it?.let {
                 root.snack(it)
             }
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
