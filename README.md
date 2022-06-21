@@ -15,7 +15,7 @@ Breaking Bad Characters App
 
 Other
 -----
-A small amount of work has been done to use [RxJava on a separate branch](/tree/rxjava) (for demo)
+A small amount of work has been done to use [RxJava on a separate branch](https://github.com/SamRuffleColes/breakingbad/tree/rxjava) (for demo)
 
 
 Next Steps
