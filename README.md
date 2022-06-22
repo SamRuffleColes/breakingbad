@@ -21,7 +21,7 @@ A small amount of work has been done to use [RxJava on a separate branch](https:
 Next Steps
 ----------
 
-* Modularise architecture
+* Move features to individual module(s)
 * Use Jetpack Compose
 * Improve the way series are handled (currently csv in each character...)
 * Test CharacterRepository 
