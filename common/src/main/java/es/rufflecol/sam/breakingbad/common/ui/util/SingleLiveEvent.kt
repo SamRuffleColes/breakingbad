@@ -1,4 +1,4 @@
-package es.rufflecol.sam.breakingbad.ui.util
+package es.rufflecol.sam.breakingbad.common.ui.util
 
 /*
  *  Copyright 2017 Google Inc.

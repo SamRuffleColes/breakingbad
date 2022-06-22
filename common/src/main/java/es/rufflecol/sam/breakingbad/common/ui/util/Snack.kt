@@ -1,4 +1,4 @@
-package es.rufflecol.sam.breakingbad.ui.util
+package es.rufflecol.sam.breakingbad.common.ui.util
 
 import android.view.View
 import androidx.annotation.StringRes

@@ -18,7 +18,7 @@ import es.rufflecol.sam.breakingbad.R
 import es.rufflecol.sam.breakingbad.characters.domain.model.CharacterEntity
 import es.rufflecol.sam.breakingbad.databinding.ActivityCharactersBinding
 import es.rufflecol.sam.breakingbad.characters.presentation.characterdetail.CharacterDetailActivity
-import es.rufflecol.sam.breakingbad.ui.util.snack
+import es.rufflecol.sam.breakingbad.common.ui.util.snack
 
 @AndroidEntryPoint
 class CharactersActivity : AppCompatActivity() {

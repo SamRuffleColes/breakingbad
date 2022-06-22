@@ -6,7 +6,7 @@ import es.rufflecol.sam.breakingbad.R
 import es.rufflecol.sam.breakingbad.common.coroutine.CoroutineDispatchProvider
 import es.rufflecol.sam.breakingbad.characters.domain.model.exception.UpdateFailedException
 import es.rufflecol.sam.breakingbad.characters.domain.usecase.CharactersUseCases
-import es.rufflecol.sam.breakingbad.ui.util.SingleLiveEvent
+import es.rufflecol.sam.breakingbad.common.ui.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

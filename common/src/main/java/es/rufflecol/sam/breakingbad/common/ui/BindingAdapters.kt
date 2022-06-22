@@ -1,4 +1,4 @@
-package es.rufflecol.sam.breakingbad.ui
+package es.rufflecol.sam.breakingbad.common.ui
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

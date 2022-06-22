@@ -1,0 +1,48 @@
+ext.versions = [
+        kotlin            : "1.6.21",
+        hilt              : "2.42",
+        arch_comp         : "2.4.1",
+        retrofit          : "2.9.0",
+        coroutines        : "1.6.0",
+        room              : "2.4.2",
+        glide             : "4.13.0",
+        ktx               : "1.8.0",
+        gradle_build_tools: "7.2.1",
+        gradle_plugin     : "1.7.0"
+]
+
+ext.dependencies = [
+        kotlin_standard_library  : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+        kotlin_coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines",
+        kotlin_coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines",
+
+        ktx_core                 : "androidx.core:core-ktx:$versions.ktx",
+        ktx_core_livedata        : "androidx.lifecycle:lifecycle-livedata-core-ktx:$versions.arch_comp",
+        ktx_livedata             : "androidx.lifecycle:lifecycle-livedata-ktx:$versions.arch_comp",
+        ktx_reactive_streams     : "androidx.lifecycle:lifecycle-reactivestreams-ktx:$versions.arch_comp",
+        ktx_lifecycle_runtime    : "androidx.lifecycle:lifecycle-runtime-ktx:$versions.arch_comp",
+        ktx_viewmodel            : "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.arch_comp",
+        ktx_activity             : "androidx.activity:activity-ktx:1.4.0",
+        ktx_room                 : "androidx.room:room-ktx:$versions.room",
+
+        material_design          : "com.google.android.material:material:1.6.1",
+        recycler_view            : "androidx.recyclerview:recyclerview:1.2.1",
+        app_compat               : "androidx.appcompat:appcompat:1.4.2",
+        constraint_layout        : "androidx.constraintlayout:constraintlayout:2.1.4",
+        room_runtime             : "androidx.room:room-runtime:$versions.room",
+        room_compiler_kapt       : "androidx.room:room-compiler:$versions.room",
+
+        hilt                     : "com.google.dagger:hilt-android:$versions.hilt",
+        hilt_dagger_compiler_kapt: "com.google.dagger:hilt-android-compiler:$versions.hilt",
+
+        retrofit                 : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+        retrofit_gson_converter  : "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+        glide                    : "com.github.bumptech.glide:glide:$versions.glide",
+        glide_kapt               : "com.github.bumptech.glide:compiler:$versions.glide",
+
+        junit                    : "junit:junit:4.13.2",
+        arch_comp_testing        : "androidx.arch.core:core-testing:2.1.0",
+        mockk                    : "io.mockk:mockk:1.12.4",
+        assertj                  : "org.assertj:assertj-core:3.11.1",
+        kotlin_coroutines_test   : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+]
